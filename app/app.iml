@@ -156,7 +156,6 @@
     <orderEntry type="library" name="Gradle: com.android.support:customtabs-26.1.0" level="project" />
     <orderEntry type="library" name="Gradle: com.google.guava:guava-jdk5:17.0@jar" level="project" />
     <orderEntry type="library" name="Gradle: android.arch.lifecycle:runtime-1.0.0" level="project" />
-    <orderEntry type="module" module-name="jokesproviderlib" />
     <orderEntry type="module" module-name="jokesviewlib" />
     <orderEntry type="library" name="Gradle: android-android-26" level="project" />
   </component>

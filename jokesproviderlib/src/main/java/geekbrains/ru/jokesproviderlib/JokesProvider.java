@@ -5,7 +5,7 @@ public class JokesProvider {
             "Me and the wife decided to make our own sex tape," +
                     " but she got really angry when I started to hold auditions for her part.";
 
-    public String getJoke() {
-        return testJoke;
+    public Joke getJoke() {
+        return new Joke (testJoke);
     }
 }
