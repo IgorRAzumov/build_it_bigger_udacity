@@ -61,6 +61,7 @@ public class MainActivity extends AppCompatActivity
         endPointsCallback = new EndPointsApiAsyncTask.EndPointsCallback() {
             @Override
             public void onCompleted(String joke) {
+                //return 404 not found
                 Intent intent = new Intent(MainActivity.this, JokesActivity.class);
                 intent.putExtra(JokesActivity.JOKES_INTENT_KEY, "dfgdgdsgsdg");
             }
