@@ -1,7 +1,22 @@
-<fragment xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/fragment"
-    android:name="com.udacity.gradle.builditbigger.fragments.MainActivityFragment"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:layout="@layout/fragment_main" />
+    android:layout_height="match_parent">
+
+    <fragment
+        android:id="@+id/fr_activity_main_fr_main"
+        android:name="com.udacity.gradle.builditbigger.fragments.MainActivityFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:tag="@string/mainFragmentTag"
+        tools:layout="@layout/fragment_main" />
+
+    <ProgressBar
+        android:id="@+id/pb_activity_main_progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:progressDrawable="@drawable/circular_progress_bar"
+        android:visibility="invisible"
+        style="?android:attr/progressBarStyleLarge"/>
+</FrameLayout>

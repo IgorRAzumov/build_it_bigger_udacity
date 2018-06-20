@@ -1,6 +1,7 @@
 package com.udacity.gradle.builditbigger.asynTasks;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
@@ -11,12 +12,47 @@ import com.udacity.gradle.builditbigger.backend.myApi.MyApi;
 import java.io.IOException;
 
 public class EndPointsApiAsyncTask extends AsyncTask<Void, Void, String> {
+    private static final String TAG = EndPointsApiAsyncTask.class.getName();
     private static MyApi myApiService = null;
     private EndPointsCallback endPointsCallback;
 
-    public EndPointsApiAsyncTask(EndPointsCallback endPointsCallback) {
+    public void setEndPointsCallback(EndPointsCallback endPointsCallback) {
         this.endPointsCallback = endPointsCallback;
     }
+
+    @Override
+    protected String doInBackground(Void... voids) {
+        if (myApiService == null) {
+            createApiService();
+        }
+
+        try {
+            return myApiService.getJoke().execute().getData();
+        } catch (IOException e) {
+            Log.e(TAG, e.getMessage());
+            return null;
+        }
+    }
+
+    @Override
+    protected void onPostExecute(String result) {
+        if (endPointsCallback == null) {
+            return;
+        }
+        if (result != null) {
+            endPointsCallback.onCompleted(result);
+        } else {
+            endPointsCallback.onError();
+        }
+    }
+
+    public interface EndPointsCallback {
+        void onCompleted(String joke);
+
+        void onError();
+
+    }
+
 
     private void createApiService() {
         MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(),
@@ -29,35 +65,11 @@ public class EndPointsApiAsyncTask extends AsyncTask<Void, Void, String> {
                     @Override
                     public void initialize(AbstractGoogleClientRequest<?>
                                                    abstractGoogleClientRequest) {
-                        abstractGoogleClientRequest.setDisableGZipContent(false);
+                        abstractGoogleClientRequest.setDisableGZipContent(true);
                     }
                 });
         // end options for devappserver
         myApiService = builder.build();
 
-    }
-
-    @Override
-    protected String doInBackground(Void... endPointsCallbacks) {
-        if (myApiService == null) {
-            createApiService();
-        }
-
-        try {
-            return myApiService.getJoke().execute().getData();
-        } catch (IOException e) {
-            return e.getMessage();
-        }
-    }
-
-    @Override
-    protected void onPostExecute(String result) {
-        endPointsCallback.onCompleted(result);
-    }
-
-    public interface EndPointsCallback {
-        void onCompleted(String joke);
-
-        String onError();
     }
 }

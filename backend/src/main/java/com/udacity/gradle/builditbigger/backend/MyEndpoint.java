@@ -6,7 +6,6 @@ import com.google.api.server.spi.config.ApiNamespace;
 
 import javax.inject.Named;
 
-import geekbrains.ru.jokesproviderlib.Joke;
 import geekbrains.ru.jokesproviderlib.JokesProvider;
 
 /**
@@ -22,11 +21,7 @@ import geekbrains.ru.jokesproviderlib.JokesProvider;
         )
 )
 public class MyEndpoint {
-    private JokesProvider jokesProvider;
-
-    public MyEndpoint() {
-        jokesProvider = new JokesProvider();
-    }
+    private final JokesProvider jokesProvider = new JokesProvider();
 
     /**
      * A simple endpoint method that takes a name and says Hi back

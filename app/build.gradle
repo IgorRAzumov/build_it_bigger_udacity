@@ -23,6 +23,9 @@ android {
         multiDexEnabled true
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        buildConfigField("String", "BANNER_KEY", BANNER_KEY)
+        buildConfigField("String", "INTERSTITIAL_KEY", INTERSTITIAL_KEY)
     }
 
     buildTypes {
@@ -31,13 +34,33 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    flavorDimensions "dimen"
+    productFlavors{
+        free{
+            dimension "dimen"
+            applicationId 'com.udacity.gradle.builditbigger.free'
+
+        }
+        paid{
+            dimension "dimen"
+            applicationId 'com.udacity.gradle.builditbigger.paid'
+        }
+    }
+
+    sourceSets {
+        androidTest {
+            java.srcDir file('src/androidTest/java')
+        }
+    }
+
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     endpointsServer project(path: ':backend', configuration: 'endpoints')
     implementation 'com.android.support:appcompat-v7:26.1.0'
-    implementation 'com.google.android.gms:play-services-ads:15.0.1'
+    freeImplementation 'com.google.android.gms:play-services-ads:15.0.1'
     implementation 'com.google.api-client:google-api-client:1.23.0'
     implementation 'com.google.http-client:google-http-client-android:1.23.0'
     implementation 'com.google.code.findbugs:jsr305:3.0.2'

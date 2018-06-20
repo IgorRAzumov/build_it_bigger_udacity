@@ -2,25 +2,35 @@ package com.udacity.gradle.builditbigger.actrivities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.asynTasks.EndPointsApiAsyncTask;
 import com.udacity.gradle.builditbigger.fragments.MainActivityFragment;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import geekbrains.ru.jokesviewlib.JokesActivity;
 
 
 public class MainActivity extends AppCompatActivity
         implements MainActivityFragment.OnActivityCallback {
+    @BindView(R.id.pb_activity_main_progress)
+    ProgressBar progressBar;
     private EndPointsApiAsyncTask.EndPointsCallback endPointsCallback;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
         initEndPointCallback();
     }
 
@@ -54,23 +64,41 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void startJoke() {
-       new EndPointsApiAsyncTask(endPointsCallback).execute();
+        EndPointsApiAsyncTask task = new EndPointsApiAsyncTask();
+        task.setEndPointsCallback(endPointsCallback);
+        task.execute();
+        progressBar.setVisibility(View.VISIBLE);
     }
 
     private void initEndPointCallback() {
         endPointsCallback = new EndPointsApiAsyncTask.EndPointsCallback() {
             @Override
             public void onCompleted(String joke) {
-                //return 404 not found
                 Intent intent = new Intent(MainActivity.this, JokesActivity.class);
-                intent.putExtra(JokesActivity.JOKES_INTENT_KEY, "dfgdgdsgsdg");
+                intent.putExtra(JokesActivity.JOKE_KEY, joke);
+                startActivity(intent);
+                loadIsEnd();
             }
 
             @Override
-            public String onError() {
-                return null;
+            public void onError() {
+               loadIsEnd();
+               showMessage(R.string.error_load_joke);
             }
         };
+    }
+
+    private void showMessage(int message) {
+        Toast.makeText(this,message,Toast.LENGTH_SHORT).show();
+    }
+
+    private void loadIsEnd() {
+        progressBar.setVisibility(View.INVISIBLE);
+        Fragment mainFragment = getSupportFragmentManager()
+                .findFragmentByTag(getString(R.string.mainFragmentTag));
+        if(mainFragment != null){
+            ((MainActivityFragment)mainFragment).onLoadingEnded();
+        }
     }
 
 }

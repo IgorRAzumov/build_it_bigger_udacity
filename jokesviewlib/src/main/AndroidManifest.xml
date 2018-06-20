@@ -3,7 +3,7 @@
     package="geekbrains.ru.jokesviewlib">
 
     <application>
-        <activity android:name=".JokesActivity"></activity>
+        <activity android:name=".JokesActivity" />
     </application>
 
 </manifest>
